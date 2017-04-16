@@ -1,0 +1,52 @@
+<html><head><title>shared-mime-info</title>
+<script src="lib/glob-to-regexp/index.js"></script>
+<script src="SharedMimeInfo.js"></script>
+</head><body>
+<h1>shared-mime-info</h1>
+
+<form>
+  <input type="file" id="file">
+</form>
+
+<ul id="results">
+</ul>
+
+<script>
+(function() {
+  var mimeinfo, input;
+
+  mimeinfo = new SharedMimeInfo('./freedesktop.org.xml');
+
+  // main
+  input = document.getElementById('file');
+  input.addEventListener('change', function(event) {
+    var i, l, li, lang = window.navigator.userLanguage || window.navigator.language;
+
+    document.getElementById('results').innerHTML = '';
+
+    for (i = 0, l = this.files.length; i < l; ++i) {
+      li = document.createElement('li');
+      li.appendChild(document.createTextNode(this.files[i].name));
+      document.getElementById('results').appendChild(li);
+      mimeinfo
+        .mimeType(this.files[i])
+        .then(function(mimeType) {
+          var comment;
+          console.info(mimeType);
+          console.info(mimeType.getAttribute('type'));
+          li.appendChild(document.createTextNode(' - '+ mimeType.getAttribute('type')));
+
+          comment = SharedMimeInfo.detectComment(mimeType, lang);
+          if (comment) {
+            li.appendChild(document.createTextNode(' - '+ comment.firstChild.nodeValue));
+          }
+        })
+        .catch(function(e) {
+          console.error(e);
+        });
+    }
+  }, false);
+}());
+</script>
+</body>
+</html>
