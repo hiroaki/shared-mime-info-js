@@ -1,7 +1,5 @@
 # Glob To Regular Expression
 
-[![Build Status](https://travis-ci.org/fitzgen/glob-to-regexp.png?branch=master)](https://travis-ci.org/fitzgen/glob-to-regexp)
-
 Turn a \*-wildcard style glob (`"*.min.js"`) into a regular expression
 (`/^.*\.min\.js$/`)!
 
